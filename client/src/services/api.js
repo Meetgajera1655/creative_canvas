@@ -1,30 +1,62 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+/* ===========================
+   ✅ BASE URL (IMPORTANT)
+=========================== */
 
-const api = axios.create({ baseURL: BASE_URL, timeout: 20000 });
+// Use Render backend in production, localhost in dev
+const BASE_URL =
+  process.env.REACT_APP_API_URL
+    ? `${process.env.REACT_APP_API_URL}/api`
+    : 'http://localhost:5000/api';
 
-api.interceptors.request.use(cfg => {
-  const token = localStorage.getItem('cc_token');
-  if (token) cfg.headers.Authorization = `Bearer ${token}`;
-  return cfg;
+/* ===========================
+   ✅ AXIOS INSTANCE
+=========================== */
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  timeout: 20000
 });
 
+/* ===========================
+   🔐 REQUEST INTERCEPTOR
+=========================== */
+
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('cc_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+/* ===========================
+   ⚠️ RESPONSE INTERCEPTOR
+=========================== */
+
 api.interceptors.response.use(
-  res => res,
-  err => {
-    if (err.response?.status === 401 && !window.location.pathname.includes('/login')) {
+  response => response,
+  error => {
+    if (
+      error.response?.status === 401 &&
+      !window.location.pathname.includes('/login')
+    ) {
       localStorage.removeItem('cc_token');
       localStorage.removeItem('cc_user');
       window.location.href = '/login';
     }
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
+/* ===========================
+   📦 API MODULES
+=========================== */
+
 export const authAPI = {
-  login: d => api.post('/auth/login', d),
-  signup: d => api.post('/auth/signup', d),
+  login: data => api.post('/auth/login', data),
+  signup: data => api.post('/auth/signup', data),
   me: () => api.get('/auth/me'),
 };
 
@@ -51,7 +83,7 @@ export const ordersAPI = {
   createRazorpay: data => api.post('/orders/create-razorpay-order', data),
   verifyPayment: data => api.post('/orders/verify-payment', data),
   getAllAdmin: () => api.get('/orders/admin/all'),
-  updateStatus: (id, d) => api.put(`/orders/${id}/status`, d),
+  updateStatus: (id, data) => api.put(`/orders/${id}/status`, data),
 };
 
 export const reviewsAPI = {
@@ -67,7 +99,8 @@ export const searchAPI = {
 export const adminAPI = {
   getStats: () => api.get('/admin/stats'),
   getUsers: () => api.get('/admin/users'),
-  updateUserStatus: (id, s) => api.put(`/admin/users/${id}/status`, { status: s }),
+  updateUserStatus: (id, status) =>
+    api.put(`/admin/users/${id}/status`, { status }),
   getReviews: () => api.get('/admin/reviews'),
 };
 
