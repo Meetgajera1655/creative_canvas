@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { wishlistAPI } from '../../services/api';
@@ -12,7 +11,6 @@ export default function ProductCard({ product, index = 0, showWishlist = true })
   const { addToCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [adding, setAdding] = useState(false);
   const [imgErr, setImgErr] = useState(false);
   const [wished, setWished] = useState(false);
 
@@ -22,19 +20,7 @@ export default function ProductCard({ product, index = 0, showWishlist = true })
   const reviewCount = Number(product.review_count) || 0;
   const inStock = !product.stock || product.stock > 0;
 
-  const handleAdd = useCallback(async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!user) { toast.error('Please sign in first'); navigate('/login'); return; }
-    if (!inStock) return;
-    setAdding(true);
-    try {
-      await addToCart(product._key, 1);
-      toast.success('Added to cart!', { icon: '🛍', style: { borderRadius: '10px', background: '#111', color: '#fff', fontSize: '13px' } });
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Could not add to cart');
-    } finally { setAdding(false); }
-  }, [user, product._key, addToCart, inStock, navigate]);
+
 
   const handleWishlist = useCallback(async (e) => {
     e.preventDefault();

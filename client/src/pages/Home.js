@@ -4,7 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { productsAPI } from '../services/api';
 import ProductCard from '../components/common/ProductCard';
-import { getImageUrl, formatPrice } from '../utils/image';
+import { getImageUrl } from '../utils/image';
 
 function FadeIn({ children, delay = 0, y = 24 }) {
   const ref = useRef(null);
@@ -33,7 +33,7 @@ export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState('all');
+  const [tab] = useState('all');
 
   useEffect(() => {
     Promise.all([
