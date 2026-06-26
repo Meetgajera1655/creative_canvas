@@ -59,10 +59,13 @@ export default function AdminOrders() {
                         <td style={{ fontWeight: 700, color: 'var(--rose)' }}>{formatPrice(o.total_amount)}</td>
                         <td><span className={`badge ${o.payment_status === 'paid' ? 'badge-green' : 'badge-gray'}`}>{o.payment_status || 'pending'}</span></td>
                         <td onClick={e => e.stopPropagation()}>
-                          <select value={o.order_status || 'placed'} onChange={e => updateStatus(o._key, e.target.value)}
-                            className="form-input" style={{ padding: '5px 32px 5px 10px', fontSize: 12, borderRadius: 'var(--r-sm)', width: 'auto', minWidth: 130 }}>
-                            {STATUSES.map(s => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
-                          </select>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className={`badge ${STATUS_BADGE[(o.order_status || 'placed').toLowerCase().replace(/ /g, '_')] || 'badge-gray'}`} style={{ flexShrink: 0 }}>●</span>
+                            <select value={o.order_status || 'placed'} onChange={e => updateStatus(o._key, e.target.value)}
+                              className="form-input" style={{ padding: '5px 32px 5px 10px', fontSize: 12, borderRadius: 'var(--r-sm)', width: 'auto', minWidth: 130 }}>
+                              {STATUSES.map(s => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
+                            </select>
+                          </div>
                         </td>
                         <td style={{ fontSize: 11, color: 'var(--light-gray)', whiteSpace: 'nowrap' }}>{new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}</td>
                         <td><button style={{ fontSize: 11, padding: '4px 10px', border: '1px solid var(--border-light)', borderRadius: 'var(--r-sm)', background: 'transparent', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>{expanded === o._key ? 'Hide' : 'Details'}</button></td>

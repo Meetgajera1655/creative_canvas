@@ -12,13 +12,13 @@ export default function Shop({ brandFilter = null, heroContent = null }) {
   const [total, setTotal] = useState(0);
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
 
-  const brand    = brandFilter || searchParams.get('brand') || '';
+  const brand = brandFilter || searchParams.get('brand') || '';
   const category = searchParams.get('category') || '';
-  const q        = searchParams.get('q') || '';
-  const sort     = searchParams.get('sort') || '';
+  const q = searchParams.get('q') || '';
+  const sort = searchParams.get('sort') || '';
   const minPrice = searchParams.get('min_price') || '';
   const maxPrice = searchParams.get('max_price') || '';
-  const minRating= searchParams.get('min_rating') || '';
+  const minRating = searchParams.get('min_rating') || '';
 
   const setParam = useCallback((key, val) => {
     const p = new URLSearchParams(searchParams);
@@ -90,7 +90,7 @@ export default function Shop({ brandFilter = null, heroContent = null }) {
             <div className="filter-card">
               <div className="filter-title">Search</div>
               <div style={{ position: 'relative' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--light-gray)" strokeWidth="2" strokeLinecap="round" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--light-gray)" strokeWidth="2" strokeLinecap="round" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                 <input value={q} onChange={e => setParam('q', e.target.value)} placeholder="Search products…" className="form-input" style={{ paddingLeft: 34, fontSize: 13, padding: '9px 10px 9px 34px' }} />
               </div>
             </div>
@@ -123,8 +123,8 @@ export default function Shop({ brandFilter = null, heroContent = null }) {
             <div className="filter-card">
               <div className="filter-title">Min Rating</div>
               {[4, 3, 2, 1].map(r => (
-                <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 10px', borderRadius: 'var(--r-xs)', cursor: 'pointer', background: minRating == r ? 'var(--warm-100)' : 'transparent', transition: 'background .1s' }}>
-                  <input type="radio" name="minRating" checked={minRating == r} onChange={() => setParam('min_rating', r)} style={{ accentColor: 'var(--rose)', width: 14, height: 14 }} />
+                <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 10px', borderRadius: 'var(--r-xs)', cursor: 'pointer', background: minRating === String(r) ? 'var(--warm-100)' : 'transparent', transition: 'background .1s' }}>
+                  <input type="radio" name="minRating" checked={minRating === String(r)} onChange={() => setParam('min_rating', r)} style={{ accentColor: 'var(--rose)', width: 14, height: 14 }} />
                   <span style={{ color: '#ff9500', fontSize: 12, letterSpacing: 1 }}>{'★'.repeat(r)}{'☆'.repeat(5 - r)}</span>
                   <span style={{ fontSize: 11, color: 'var(--light-gray)' }}>& above</span>
                 </label>

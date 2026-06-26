@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { productsAPI } from '../../services/api';
@@ -19,14 +19,14 @@ export default function AdminProducts() {
   const [saving, setSaving]   = useState(false);
   const [search, setSearch]   = useState('');
 
-  const fetch = async () => {
+  const fetch = useCallback(async () => {
     setLoading(true);
     const r = await productsAPI.getAll(tab ? { brand: tab, sort: 'newest' } : { sort: 'newest' });
     setProducts(r.data.products || []);
     setLoading(false);
-  };
+  }, [tab]);
 
-  useEffect(() => { fetch(); }, [tab]);
+  useEffect(() => { fetch(); }, [fetch]);
 
   const up = (k, v) => setForm(f => ({ ...f, [k]: v }));
 

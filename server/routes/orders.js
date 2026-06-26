@@ -20,7 +20,10 @@ router.post('/create-razorpay-order', authMiddleware, async (req, res) => {
     if (!razorpay) return res.status(503).json({ error: 'Payment gateway not configured' });
     const order = await razorpay.orders.create({ amount: Math.round(amount), currency: 'INR', receipt: 'cc_' + Date.now() });
     res.json({ order_id: order.id, amount: order.amount, currency: order.currency, key: process.env.RAZORPAY_KEY_ID });
-  } catch (e) { res.status(500).json({ error: e.message }); }
+  } catch (e) { 
+    console.error('Razorpay Error:', e);
+    res.status(500).json({ error: e.error?.description || e.message || 'Failed to create payment order with Razorpay' }); 
+  }
 });
 
 // POST /api/orders/verify-payment

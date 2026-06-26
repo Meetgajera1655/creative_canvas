@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { wishlistAPI } from '../../services/api';
@@ -88,24 +89,13 @@ export default function ProductCard({ product, index = 0, showWishlist = true })
               <span className="product-stars-count">({reviewCount})</span>
             </div>
           )}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
-            <div>
-              <span className={`product-price ${isKasab ? 'product-price-kasab' : ''}`}>{formatPrice(product.price)}</span>
-              {inStock && product.stock && product.stock <= 5 && (
-                <span style={{ display: 'block', fontSize: 10, color: 'var(--orange)', fontWeight: 600, marginTop: 1 }}>Only {product.stock} left!</span>
-              )}
-            </div>
-            <button onClick={handleAdd} disabled={adding || !inStock} className="btn btn-sm btn-rose"
-              style={{ padding: '6px 14px', fontSize: 12, borderRadius: 'var(--r-sm)' }}>
-              {adding ? '…' : inStock ? '+ Cart' : 'N/A'}
-            </button>
+          <div style={{ marginTop: 12 }}>
+            <span className={`product-price ${isKasab ? 'product-price-kasab' : ''}`}>{formatPrice(product.price)}</span>
+            {inStock && product.stock > 0 && product.stock <= 5 && (
+              <span style={{ display: 'block', fontSize: 10, color: 'var(--orange)', fontWeight: 600, marginTop: 2 }}>Only {product.stock} left!</span>
+            )}
           </div>
         </div>
-
-        {/* Quick add on hover */}
-        <button className="product-quick-add" onClick={handleAdd} disabled={adding || !inStock}>
-          {adding ? 'Adding…' : inStock ? 'Add to Cart' : 'Out of Stock'}
-        </button>
       </div>
     </motion.div>
   );

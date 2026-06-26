@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ordersAPI } from '../services/api';
 import { formatPrice } from '../utils/image';
 
-const STEPS = ['placed','confirmed','shipped','out_for_delivery','delivered'];
-const STEP_LABELS = { placed:'Placed', confirmed:'Confirmed', shipped:'Shipped', out_for_delivery:'Out for Delivery', delivered:'Delivered', cancelled:'Cancelled' };
+const STEPS = ['placed', 'confirmed', 'shipped', 'out_for_delivery', 'delivered'];
+const STEP_LABELS = { placed: 'Placed', confirmed: 'Confirmed', shipped: 'Shipped', out_for_delivery: 'Out for Delivery', delivered: 'Delivered', cancelled: 'Cancelled' };
 const statusClass = s => s === 'delivered' ? 'badge-green' : s === 'cancelled' ? 'badge-red' : s === 'shipped' || s === 'out_for_delivery' ? 'badge-orange' : 'badge-gray';
 
 export default function Orders() {

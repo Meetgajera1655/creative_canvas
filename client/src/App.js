@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -40,9 +40,18 @@ function Protected({ children, adminOnly = false }) {
   return children;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function AppRoutes() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar />
       <main style={{ minHeight: '70vh' }}>
         <Routes>

@@ -86,30 +86,41 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-        {/* RIGHT — mosaic */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 3, overflow: 'hidden', background: 'var(--border-light)' }}>
-          {[heroImg, heroImg2, heroImg3, featured[3]].map((p, i) => (
-            <div key={i} style={{ background: 'var(--warm-100)', overflow: 'hidden', position: 'relative', ...(i === 0 ? { gridRow: 'span 2' } : {}) }}>
-              {p?.photo ? (
-                <img src={getImageUrl(p.photo, p?.name)} alt={p?.name || ''} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .5s' }} onError={e => { e.target.style.display = 'none'; }} />
-              ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 52, opacity: .25 }}>{i === 2 ? '🧵' : '🎨'}</div>
-              )}
-              {i === 0 && p && (
-                <div style={{ position: 'absolute', bottom: 18, left: 18, background: 'rgba(255,255,255,.93)', borderRadius: 'var(--r-md)', padding: '7px 13px', fontSize: 12, fontWeight: 600, color: 'var(--off-black)', backdropFilter: 'blur(8px)' }}>
-                  {p.name?.substring(0, 20)}{p.name?.length > 20 ? '…' : ''} · {formatPrice(p.price)}
-                </div>
-              )}
-            </div>
-          ))}
+        {/* RIGHT — Editorial Collage */}
+        <div style={{ position: 'relative', width: '100%', height: '100%', background: 'var(--cream)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          
+          {/* Main Arch Image */}
+          {heroImg && (
+            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [.16,1,.3,1] }}
+              style={{ position: 'absolute', left: '15%', top: '15%', width: '45%', height: '70%', borderRadius: '250px 250px 16px 16px', overflow: 'hidden', boxShadow: 'var(--shadow-lg)', border: '10px solid #ffffff' }}>
+              <img src={getImageUrl(heroImg.photo, heroImg.name)} alt={heroImg.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </motion.div>
+          )}
+
+          {/* Floating Circle Image */}
+          {heroImg2 && (
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2, ease: [.16,1,.3,1] }}
+              style={{ position: 'absolute', right: '12%', bottom: '12%', width: '38%', aspectRatio: '1/1', borderRadius: '50%', overflow: 'hidden', boxShadow: 'var(--shadow-xl)', border: '8px solid #ffffff', zIndex: 2 }}>
+              <img src={getImageUrl(heroImg2.photo, heroImg2.name)} alt={heroImg2.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </motion.div>
+          )}
+
+          {/* Floating Pill Image */}
+          {heroImg3 && (
+            <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [.16,1,.3,1] }}
+              style={{ position: 'absolute', right: '10%', top: '10%', width: '28%', height: '38%', borderRadius: '200px', overflow: 'hidden', boxShadow: 'var(--shadow-md)', border: '6px solid #ffffff', zIndex: 1 }}>
+              <img src={getImageUrl(heroImg3.photo, heroImg3.name)} alt={heroImg3.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </motion.div>
+          )}
+          
         </div>
       </section>
 
       {/* ══ MARQUEE ══ */}
-      <div style={{ background: 'var(--off-black)', overflow: 'hidden', padding: '13px 0' }}>
+      <div style={{ background: 'var(--rose)', overflow: 'hidden', padding: '13px 0' }}>
         <div style={{ display: 'flex', animation: 'marquee 30s linear infinite', whiteSpace: 'nowrap', width: 'max-content' }}>
           {[...Array(4)].map((_, j) => ['Creative Canvas Resin Art', '·', 'Kasab Embroidery', '·', 'Custom Orders Welcome', '·', 'Free Shipping on ₹999+', '·', '100% Handmade', '·'].map((t, i) => (
-            <span key={`${j}-${i}`} style={{ padding: '0 18px', fontSize: 11, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: t === '·' ? 'var(--rose)' : 'rgba(255,255,255,.3)' }}>{t}</span>
+            <span key={`${j}-${i}`} style={{ padding: '0 18px', fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: t === '·' ? 'rgba(0,0,0,.4)' : 'var(--kasab-dark)' }}>{t}</span>
           )))}
         </div>
         <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-25%)}}`}</style>
@@ -121,12 +132,12 @@ export default function Home() {
           <SectionHeader eyebrow="Collections" title="Shop by <em>Category</em>" />
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
             {[
-              { to: '/creative-canvas', label: 'Resin Art', title: 'Creative Canvas', sub: 'Luminous epoxy pieces — each one unique', img: resin[0]?.photo, name: resin[0]?.name, dark: false },
-              { to: '/kasab', label: 'Embroidery & Textile', title: 'Kasab', sub: 'Khatali embroidery rooted in heritage', img: kasab[0]?.photo, name: kasab[0]?.name, dark: true },
+              { to: '/creative-canvas', label: 'Resin Art', title: 'Creative Canvas', sub: 'Luminous epoxy pieces — each one unique', staticImg: '/resin_category.png', dark: false },
+              { to: '/kasab', label: 'Embroidery & Textile', title: 'Kasab', sub: 'Khatali embroidery rooted in heritage', staticImg: '/kasab_category.png', dark: true },
             ].map(cat => (
               <FadeIn key={cat.to} delay={.1}>
                 <Link to={cat.to} style={{ display: 'block', borderRadius: 'var(--r-xl)', overflow: 'hidden', position: 'relative', aspectRatio: '16/9', background: cat.dark ? 'var(--kasab-dark)' : 'var(--warm-100)' }}>
-                  {cat.img && <img src={getImageUrl(cat.img, cat.name)} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .5s' }} onError={e => e.target.style.display = 'none'} onMouseEnter={e => e.target.style.transform = 'scale(1.04)'} onMouseLeave={e => e.target.style.transform = 'scale(1)'} />}
+                  <img src={cat.staticImg} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .5s' }} onMouseEnter={e => e.target.style.transform = 'scale(1.04)'} onMouseLeave={e => e.target.style.transform = 'scale(1)'} />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.1) 60%)' }} />
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px 28px' }}>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)', marginBottom: 5 }}>{cat.label}</div>
@@ -149,14 +160,6 @@ export default function Home() {
               <div className="eyebrow" style={{ marginBottom: 8 }}>Featured</div>
               <h2 className="heading-lg" style={{ marginBottom: 0 }}>Handpicked <em style={{ fontStyle: 'italic', color: 'var(--rose)' }}>for you</em></h2>
             </FadeIn>
-            <div style={{ display: 'flex', gap: 4, background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 'var(--r-full)', padding: 4 }}>
-              {[['all', 'All'], ['resin', 'Resin Art'], ['kasab', 'Kasab']].map(([t, l]) => (
-                <button key={t} onClick={() => setTab(t)}
-                  style={{ padding: '6px 16px', borderRadius: 'var(--r-full)', fontSize: 12, fontWeight: 500, cursor: 'pointer', border: 'none', background: tab === t ? 'var(--off-black)' : 'transparent', color: tab === t ? 'var(--white)' : 'var(--mid-gray)', transition: 'all .15s', fontFamily: 'var(--font-body)' }}>
-                  {l}
-                </button>
-              ))}
-            </div>
           </div>
           {loading ? <div className="loading-center"><div className="spinner" /></div>
             : <div className="products-grid">{display.slice(0, 8).map((p, i) => <ProductCard key={p._key} product={p} index={i} />)}</div>}

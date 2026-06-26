@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { ordersAPI } from '../services/api';
@@ -24,6 +24,21 @@ export default function Checkout() {
   const [addr, setAddr] = useState({ name: user?.username || '', email: user?.email || '', phone: '', line1: '', line2: '', city: '', state: '', pincode: '' });
   const [method, setMethod] = useState('razorpay');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (addr.pincode && addr.pincode.length === 6) {
+      fetch(`https://api.postalpincode.in/pincode/${addr.pincode}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data[0] && data[0].Status === 'Success') {
+            const po = data[0].PostOffice[0];
+            setAddr(a => ({ ...a, city: po.District, state: po.State }));
+            toast.success('City & State auto-filled from PIN Code!', { icon: '📍', style: { borderRadius: '10px', background: '#111', color: '#fff', fontSize: '13px' } });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [addr.pincode]);
 
   const up = (k, v) => setAddr(a => ({ ...a, [k]: v }));
 
@@ -71,10 +86,10 @@ export default function Checkout() {
     </div>
   );
 
-  const F = ({ label, k, type = 'text', ph, span2 = false }) => (
-    <div className="form-group" style={span2 ? { gridColumn: 'span 2' } : {}}>
+  const renderField = (label, k, type = 'text', ph, span2 = false, listId = '') => (
+    <div className="form-group" style={span2 ? { gridColumn: 'span 2' } : {}} key={k}>
       <label className="form-label">{label} *</label>
-      <input className="form-input" type={type} value={addr[k]} onChange={e => up(k, e.target.value)} placeholder={ph} />
+      <input className="form-input" type={type} value={addr[k]} onChange={e => up(k, e.target.value)} placeholder={ph} list={listId ? listId : undefined} />
     </div>
   );
 
@@ -87,15 +102,21 @@ export default function Checkout() {
         <div>
           <div style={{ background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 'var(--r-xl)', padding: 28, marginBottom: 16 }}>
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 500, color: 'var(--off-black)', marginBottom: 22 }}>Delivery Address</h3>
+            
+            <datalist id="statesList">
+              <option value="Andhra Pradesh" /><option value="Arunachal Pradesh" /><option value="Assam" /><option value="Bihar" /><option value="Chhattisgarh" /><option value="Goa" /><option value="Gujarat" /><option value="Haryana" /><option value="Himachal Pradesh" /><option value="Jharkhand" /><option value="Karnataka" /><option value="Kerala" /><option value="Madhya Pradesh" /><option value="Maharashtra" /><option value="Manipur" /><option value="Meghalaya" /><option value="Mizoram" /><option value="Nagaland" /><option value="Odisha" /><option value="Punjab" /><option value="Rajasthan" /><option value="Sikkim" /><option value="Tamil Nadu" /><option value="Telangana" /><option value="Tripura" /><option value="Uttar Pradesh" /><option value="Uttarakhand" /><option value="West Bengal" />
+              <option value="Andaman and Nicobar Islands" /><option value="Chandigarh" /><option value="Dadra and Nagar Haveli and Daman and Diu" /><option value="Delhi" /><option value="Jammu and Kashmir" /><option value="Ladakh" /><option value="Lakshadweep" /><option value="Puducherry" />
+            </datalist>
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-              <F label="Full Name" k="name" ph="Your name" />
-              <F label="Email" k="email" type="email" ph="email@example.com" />
-              <F label="Phone" k="phone" ph="+91 98765 43210" span2 />
-              <F label="Address Line 1" k="line1" ph="House/Flat No, Street" span2 />
-              <F label="Address Line 2 (optional)" k="line2" ph="Area, Landmark" span2 />
-              <F label="City" k="city" ph="City" />
-              <F label="State" k="state" ph="State" />
-              <F label="PIN Code" k="pincode" ph="400001" />
+              {renderField("Full Name", "name", "text", "Your name")}
+              {renderField("Email", "email", "email", "email@example.com")}
+              {renderField("Phone", "phone", "text", "+91 98765 43210", true)}
+              {renderField("Address Line 1", "line1", "text", "House/Flat No, Street", true)}
+              {renderField("Address Line 2 (optional)", "line2", "text", "Area, Landmark", true)}
+              {renderField("PIN Code", "pincode", "text", "400001")}
+              {renderField("City", "city", "text", "City")}
+              {renderField("State", "state", "text", "State", true, "statesList")}
             </div>
           </div>
 
