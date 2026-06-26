@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaWhatsapp, FaInstagram, FaUser } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { FiArrowRight } from 'react-icons/fi';
 
 const Decoration = () => (

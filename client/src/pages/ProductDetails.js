@@ -44,7 +44,7 @@ export default function ProductDetails() {
       productsAPI.getAll({ brand: product.brand || 'resin', limit: 6 }).then(r => {
         setRelated((r.data.products || []).filter(p => p._key !== id).slice(0, 4));
       });
-      if (user) wishlistAPI.check(id).then(r => setWished(r.data.wishlisted)).catch(() => {});
+      if (user) wishlistAPI.check(id).then(r => setWished(r.data.wishlisted)).catch(() => { });
     }
   }, [product, id, user]);
 
@@ -100,197 +100,226 @@ export default function ProductDetails() {
 
   return (
     <>
-      <div className="container" style={{ paddingTop: 24, paddingBottom: 64 }}>
-        <div className="breadcrumb" style={{ marginBottom: 24 }}>
-          <Link to="/">Home</Link><span className="breadcrumb-sep">›</span>
-          <Link to="/shop">Shop</Link><span className="breadcrumb-sep">›</span>
+      <div className="container" style={{ paddingTop: 32, paddingBottom: 80 }}>
+        <div className="breadcrumb" style={{ marginBottom: 32, fontSize: 13, fontWeight: 500 }}>
+          <Link to="/">Home</Link><span className="breadcrumb-sep" style={{ opacity: 0.5, margin: '0 12px' }}>/</span>
+          <Link to="/shop">Shop</Link><span className="breadcrumb-sep" style={{ opacity: 0.5, margin: '0 12px' }}>/</span>
           <Link to={isKasab ? '/kasab' : '/creative-canvas'}>{isKasab ? 'Kasab' : 'Creative Canvas'}</Link>
-          <span className="breadcrumb-sep">›</span><span style={{ color: 'var(--dark-gray)' }}>{product.name}</span>
+          <span className="breadcrumb-sep" style={{ opacity: 0.5, margin: '0 12px' }}>/</span><span style={{ color: 'var(--off-black)' }}>{product.name}</span>
         </div>
 
-        <div className="product-detail-layout" style={{ marginBottom: 64 }}>
-          {/* LEFT — Image */}
-          <div style={{ position: 'sticky', top: 'calc(var(--nav-h) + 20px)' }}>
-            <motion.div initial={{ opacity: 0, scale: .97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .4 }}
-              style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', aspectRatio: '1/1', background: 'var(--warm-100)', boxShadow: 'var(--shadow-lg)' }}>
-              <img src={images[activeImg] ? getImageUrl(images[activeImg], product.name) : imgSrc} alt={product.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={() => setImgErr(true)} />
+        {/* MASTER UNIFIED CONTAINER */}
+        <div style={{ background: 'var(--white)', borderRadius: 40, padding: 'clamp(24px, 4vw, 48px)', border: '1px solid var(--border-light)', boxShadow: '0 20px 60px rgba(0,0,0,0.04)', marginBottom: 80 }}>
+          <div className="product-detail-layout" style={{ gap: 'clamp(32px, 5vw, 64px)', margin: 0 }}>
+
+            {/* LEFT — Image Area */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}>
+              <div style={{ borderRadius: 24, overflow: 'hidden', background: 'var(--warm-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, border: '1px solid var(--border-light)' }}>
+                <img src={images[activeImg] ? getImageUrl(images[activeImg], product.name) : imgSrc} alt={product.name}
+                  style={{ width: '100%', height: 'auto', maxHeight: '60vh', objectFit: 'contain', filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.08))' }} onError={() => setImgErr(true)} />
+              </div>
+
+              {images.length > 1 && (
+                <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  {images.map((img, i) => (
+                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 72, height: 72, borderRadius: 16, overflow: 'hidden', cursor: 'pointer', border: `2px solid ${activeImg === i ? 'var(--off-black)' : 'transparent'}`, background: 'var(--warm-50)', padding: 4, transition: 'all .2s', opacity: activeImg === i ? 1 : 0.6 }} onMouseEnter={e => e.currentTarget.style.opacity = 1} onMouseLeave={e => { if (activeImg !== i) e.currentTarget.style.opacity = 0.6 }}>
+                      <div style={{ width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden' }}>
+                        <img src={getImageUrl(img, product.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
-            {images.length > 1 && (
-              <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
-                {images.map((img, i) => (
-                  <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 'var(--r-md)', overflow: 'hidden', cursor: 'pointer', border: `2px solid ${activeImg === i ? 'var(--rose)' : 'var(--border-light)'}`, transition: 'border-color .15s' }}>
-                    <img src={getImageUrl(img, product.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+
+            {/* RIGHT — Info Area */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .6, delay: .15 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+                  <span style={{ background: isKasab ? 'rgba(212,175,55,0.1)' : 'rgba(201,137,122,0.1)', color: isKasab ? '#b8860b' : 'var(--rose-dark)', padding: '6px 12px', borderRadius: 30, fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase' }}>
+                    {isKasab ? '🧵 Kasab Heritage' : '🎨 Original Resin'}
+                  </span>
+                  {!inStock && <span style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', padding: '6px 12px', borderRadius: 30, fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase' }}>Out of Stock</span>}
+                </div>
+
+                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 600, color: 'var(--off-black)', lineHeight: 1.15, letterSpacing: '-.02em', marginBottom: 16 }}>{product.name}</h1>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid var(--border-light)' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 700, color: 'var(--off-black)', letterSpacing: '-.02em', lineHeight: 1 }}>{formatPrice(product.price)}</div>
+                  {avg > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginLeft: 'auto', alignItems: 'flex-end' }}>
+                      <div style={{ display: 'flex', gap: 2, color: '#ff9500', fontSize: 14 }}>{renderStars(avg)}</div>
+                      <span style={{ color: 'var(--mid-gray)', fontSize: 13, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => { setActiveTab('reviews'); document.getElementById('details-section').scrollIntoView({ behavior: 'smooth' }); }}>{rCount} Review{rCount !== 1 ? 's' : ''}</span>
+                    </div>
+                  )}
+                </div>
+
+                {product.description && <p style={{ fontSize: 14, color: 'var(--dark-gray)', lineHeight: 1.7, marginBottom: 24 }}>{product.description}</p>}
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 16, marginBottom: 32 }}>
+                  {[['Category', product.type], ['Brand', isKasab ? 'Kasab' : 'Creative Canvas'], ['Stock', inStock ? (product.stock ? `${product.stock} units` : 'In Stock') : 'Out of Stock']].filter(([, v]) => v).map(([k, v]) => (
+                    <div key={k} style={{ background: 'var(--warm-50)', padding: 12, borderRadius: 12 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--silver)', letterSpacing: '.05em', textTransform: 'uppercase', marginBottom: 4 }}>{k}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-black)' }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Qty & Add to Cart Block */}
+                <div style={{ display: 'flex', gap: 10, marginBottom: 24, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', background: 'var(--white)', border: '1.5px solid var(--border)', borderRadius: 24, padding: '4px 6px', height: 48 }}>
+                    <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--off-white)', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--dark-gray)', transition: 'background .2s' }} onMouseEnter={e => e.target.style.background = 'var(--warm-100)'} onMouseLeave={e => e.target.style.background = 'var(--off-white)'}>−</button>
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, width: 36, textAlign: 'center' }}>{qty}</span>
+                    <button onClick={() => setQty(q => q + 1)} style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--off-white)', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--dark-gray)', transition: 'background .2s' }} onMouseEnter={e => e.target.style.background = 'var(--warm-100)'} onMouseLeave={e => e.target.style.background = 'var(--off-white)'}>+</button>
+                  </div>
+                  <button onClick={handleAdd} disabled={adding || !inStock} className="btn btn-rose" style={{ flex: 1, minWidth: 140, height: 48, borderRadius: 24, fontSize: 15, fontWeight: 600, letterSpacing: '.02em', boxShadow: '0 6px 16px rgba(201,137,122,.2)' }}>
+                    {adding ? 'Adding to Cart…' : 'Add to Cart'}
+                  </button>
+                  <button onClick={handleWishlist} style={{ width: 48, height: 48, borderRadius: 24, border: '1.5px solid var(--border)', background: wished ? 'var(--red-light)' : 'var(--white)', cursor: 'pointer', fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', color: wished ? 'var(--red)' : 'var(--mid-gray)', transition: 'all .2s' }}>
+                    {wished ? '♥' : '♡'}
+                  </button>
+                </div>
+                <div style={{ background: 'var(--warm-50)', borderRadius: 16, padding: 16, marginBottom: 24 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                    <span style={{ fontSize: 16 }}>📦</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-black)' }}>Check Delivery Estimate</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <input value={pincode} onChange={e => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="Enter 6-digit pincode" style={{ flex: 1, padding: '0 16px', height: 40, fontSize: 13, border: '1px solid var(--border-light)', borderRadius: 20, outline: 'none' }} />
+                    <button onClick={checkDelivery} style={{ height: 40, padding: '0 20px', borderRadius: 20, background: 'var(--off-black)', color: '#fff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Check</button>
+                  </div>
+                  {delivery && <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} style={{ fontSize: 12, color: '#16a34a', marginTop: 10, fontWeight: 600 }}>✓ {delivery}</motion.div>}
+                </div>
+
+                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', fontSize: 12, color: 'var(--mid-gray)', paddingTop: 20, borderTop: '1px solid var(--border-light)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 16 }}>🚚</span> Free shipping ₹999+</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 16 }}>↩</span> 7-day returns</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 16 }}>🔒</span> Secure checkout</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* BOTTOM SECTION */}
+        <div style={{ background: 'var(--white)', borderRadius: 32, padding: 'clamp(24px, 3vw, 40px)', border: '1px solid var(--border-light)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+
+          <div id="details-section" style={{ display: 'flex', gap: 24, borderBottom: '1px solid var(--border-light)', marginBottom: 32, paddingBottom: 12 }}>
+            {[['reviews', `Reviews (${rCount})`], ['info', 'Details & Care']].map(([t, l]) => (
+              <button key={t} onClick={() => setActiveTab(t)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: 15,
+                  fontWeight: activeTab === t ? 700 : 500,
+                  color: activeTab === t ? 'var(--off-black)' : 'var(--silver)',
+                  cursor: 'pointer',
+                  padding: 0,
+                  position: 'relative',
+                  fontFamily: 'var(--font-display)',
+                  letterSpacing: '-.01em',
+                  transition: 'color .3s'
+                }}>
+                {l}
+                {activeTab === t && <motion.div layoutId="activeTabIndicator" style={{ position: 'absolute', bottom: -13, left: 0, right: 0, height: 2, background: 'var(--off-black)' }} />}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === 'info' && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: 800 }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, marginBottom: 16 }}>The Art of Crafting</h3>
+              <p style={{ fontSize: 14, color: 'var(--mid-gray)', lineHeight: 1.7, marginBottom: 32 }}>{product.description || 'A beautiful handcrafted piece made with love and care.'}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                {[['Material', isKasab ? 'Premium Thread & Fabric' : 'Food-grade Epoxy Resin'], ['Origin', 'Handcrafted in India'], ['Care', isKasab ? 'Dry clean recommended' : 'Wipe gently with damp cloth'], ['Customization', 'Available on request']].map(([k, v]) => (
+                  <div key={k} style={{ padding: 16, background: 'var(--warm-50)', borderRadius: 16 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--silver)', marginBottom: 6 }}>{k}</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-black)' }}>{v}</div>
                   </div>
                 ))}
               </div>
-            )}
-          </div>
+            </motion.div>
+          )}
 
-          {/* RIGHT — Info */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .4, delay: .1 }}>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
-              <span className={`badge ${isKasab ? 'badge-gold' : 'badge-rose'}`}>{isKasab ? '🧵 Kasab' : '🎨 Creative Canvas'}</span>
-              {product.type && <span className="badge badge-gray">{product.type}</span>}
-              {!inStock && <span className="badge badge-red">Out of Stock</span>}
-            </div>
-
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,2.5vw,32px)', fontWeight: 600, color: 'var(--off-black)', lineHeight: 1.2, letterSpacing: '-.02em', marginBottom: 14 }}>{product.name}</h1>
-
-            {avg > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                <div style={{ background: avg >= 4 ? '#22c55e' : avg >= 3 ? '#f59e0b' : '#ef4444', color: '#fff', fontSize: 12, fontWeight: 700, padding: '3px 8px', borderRadius: 'var(--r-sm)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  ★ {avg}
+          {activeTab === 'reviews' && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: 900 }}>
+              {avg > 0 && (
+                <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', padding: 24, background: 'var(--warm-50)', borderRadius: 20, marginBottom: 32, alignItems: 'center' }}>
+                  <div style={{ textAlign: 'center', minWidth: 120 }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 700, color: 'var(--off-black)', lineHeight: 1 }}>{avg}</div>
+                    <div style={{ color: '#ff9500', fontSize: 14, letterSpacing: 3, marginTop: 8 }}>{renderStars(avg)}</div>
+                    <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--light-gray)', marginTop: 8 }}>Based on {rCount} review{rCount !== 1 ? 's' : ''}</div>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    {[5, 4, 3, 2, 1].map(s => {
+                      const c = reviews.filter(r => r.rating === s).length; const pct = rCount > 0 ? Math.round((c / rCount) * 100) : 0; return (
+                        <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-gray)', width: 28 }}>{s} ★</span>
+                          <div style={{ flex: 1, height: 6, background: 'var(--border-light)', borderRadius: 3, overflow: 'hidden' }}><div style={{ height: '100%', background: '#16a34a', borderRadius: 3, width: `${pct}%`, transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' }} /></div>
+                          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--light-gray)', width: 28, textAlign: 'right' }}>{pct}%</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <span style={{ color: '#2563eb', fontSize: 13, cursor: 'pointer' }} onClick={() => setActiveTab('reviews')}>{rCount} rating{rCount !== 1 ? 's' : ''}</span>
-              </div>
-            )}
+              )}
 
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 700, color: 'var(--off-black)', marginBottom: 22, letterSpacing: '-.02em' }}>{formatPrice(product.price)}</div>
-
-            {product.description && <p style={{ fontSize: 14, color: 'var(--mid-gray)', lineHeight: 1.8, marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid var(--border-light)' }}>{product.description}</p>}
-
-            <div style={{ marginBottom: 20 }}>
-              {[['Category', product.type], ['Brand', isKasab ? 'Kasab' : 'Creative Canvas'], ['Stock', inStock ? (product.stock ? `${product.stock} units` : 'In Stock') : 'Out of Stock']].filter(([, v]) => v).map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', gap: 14, marginBottom: 8, fontSize: 13 }}>
-                  <span style={{ color: 'var(--light-gray)', width: 70, flexShrink: 0 }}>{k}</span>
-                  <span style={{ fontWeight: 500, color: 'var(--dark-gray)' }}>{v}</span>
+              {/* Write review */}
+              {user ? (
+                <div style={{ background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 20, padding: 24, marginBottom: 32 }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 600, marginBottom: 16, textAlign: 'center' }}>Share your experience</h3>
+                  <div className="stars-input" style={{ marginBottom: 16, textAlign: 'center', fontSize: 24 }}>
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <span key={s} className={`star ${s <= (hover || rating) ? 'on' : ''}`} onMouseEnter={() => setHover(s)} onMouseLeave={() => setHover(0)} onClick={() => setRating(s)} style={{ cursor: 'pointer', transition: 'color .2s', margin: '0 4px', color: s <= (hover || rating) ? '#ff9500' : 'var(--border)' }}>★</span>
+                    ))}
+                  </div>
+                  <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="What did you love about this piece?" style={{ width: '100%', padding: 16, fontSize: 13, borderRadius: 12, border: '1px solid var(--border-light)', outline: 'none', minHeight: 80, marginBottom: 16, fontFamily: 'var(--font-body)', resize: 'vertical' }} />
+                  <div style={{ textAlign: 'center' }}>
+                    <button onClick={handleReview} disabled={submitting} className="btn btn-primary" style={{ padding: '10px 32px', fontSize: 13, borderRadius: 30 }}>{submitting ? 'Submitting…' : 'Submit Review'}</button>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Qty */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, background: 'var(--off-white)', borderRadius: 'var(--r-lg)', padding: '12px 16px', width: 'fit-content' }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--mid-gray)' }}>Qty</span>
-              <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{ width: 32, height: 32, borderRadius: '50%', border: '1.5px solid var(--border)', background: 'var(--white)', cursor: 'pointer', fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, width: 32, textAlign: 'center' }}>{qty}</span>
-              <button onClick={() => setQty(q => q + 1)} style={{ width: 32, height: 32, borderRadius: '50%', border: '1.5px solid var(--border)', background: 'var(--white)', cursor: 'pointer', fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
-              <button onClick={handleAdd} disabled={adding || !inStock} className="btn btn-rose btn-lg" style={{ flex: 1, minWidth: 160, justifyContent: 'center' }}>
-                {adding ? 'Adding…' : '🛍 Add to Cart'}
-              </button>
-              <button onClick={handleWishlist} style={{ width: 48, height: 48, borderRadius: 'var(--r-md)', border: '1.5px solid var(--border-light)', background: wished ? 'var(--red-light)' : 'var(--white)', cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', color: wished ? 'var(--red)' : 'var(--mid-gray)', transition: 'all .15s' }}>
-                {wished ? '♥' : '♡'}
-              </button>
-            </div>
-
-            {/* Delivery check */}
-            <div style={{ background: 'var(--off-white)', borderRadius: 'var(--r-lg)', padding: '16px', marginBottom: 20 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--dark-gray)', marginBottom: 10 }}>📦 Check Delivery</div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input value={pincode} onChange={e => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="Enter pincode" className="form-input" style={{ flex: 1, padding: '8px 12px', fontSize: 13 }} />
-                <button onClick={checkDelivery} className="btn btn-primary btn-sm" style={{ flexShrink: 0 }}>Check</button>
-              </div>
-              {delivery && <div style={{ fontSize: 12, color: 'var(--green)', marginTop: 8, fontWeight: 500 }}>✓ {delivery}</div>}
-            </div>
-
-            <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', fontSize: 12, color: 'var(--mid-gray)' }}>
-              {['🚚 Free shipping ₹999+', '↩ 7-day returns', '🔒 Secure payment'].map(t => <span key={t}>{t}</span>)}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* TABS */}
-        <div style={{ borderBottom: '1px solid var(--border-light)', marginBottom: 32, display: 'flex', gap: 0 }}>
-          {[['reviews', `Reviews (${rCount})`], ['info', 'Product Info']].map(([t, l]) => (
-            <button key={t} onClick={() => setActiveTab(t)}
-              style={{ padding: '12px 22px', fontSize: 14, fontWeight: 500, cursor: 'pointer', border: 'none', background: 'transparent', color: activeTab === t ? 'var(--off-black)' : 'var(--light-gray)', borderBottom: `2px solid ${activeTab === t ? 'var(--off-black)' : 'transparent'}`, transition: 'all .15s', fontFamily: 'var(--font-body)', marginBottom: '-1px' }}>
-              {l}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === 'info' && (
-          <div style={{ maxWidth: 640 }}>
-            <p style={{ fontSize: 15, color: 'var(--mid-gray)', lineHeight: 1.8, marginBottom: 24 }}>{product.description || 'A beautiful handcrafted piece made with love and care.'}</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[['Material', isKasab ? 'Premium Thread & Fabric' : 'Food-grade Epoxy Resin'], ['Origin', 'Handcrafted in India'], ['Care', isKasab ? 'Dry clean recommended' : 'Wipe with damp cloth'], ['Customization', 'Available on request']].map(([k, v]) => (
-                <div key={k} style={{ padding: '14px', background: 'var(--white)', borderRadius: 'var(--r-md)', border: '1px solid var(--border-light)' }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--silver)', marginBottom: 4 }}>{k}</div>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--dark-gray)' }}>{v}</div>
+              ) : (
+                <div style={{ background: 'var(--warm-50)', padding: 20, borderRadius: 16, marginBottom: 32, textAlign: 'center' }}>
+                  <p style={{ fontSize: 13, color: 'var(--mid-gray)', marginBottom: 12 }}>Have you purchased this piece?</p>
+                  <Link to="/login" className="btn btn-outline" style={{ borderRadius: 30, fontSize: 13, padding: '8px 24px' }}>Sign in to write a review</Link>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              )}
 
-        {activeTab === 'reviews' && (
-          <div style={{ maxWidth: 700 }}>
-            {avg > 0 && (
-              <div style={{ display: 'flex', gap: 32, padding: 24, background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 'var(--r-xl)', marginBottom: 28 }}>
-                <div style={{ textAlign: 'center', flexShrink: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 700, color: 'var(--off-black)', lineHeight: 1 }}>{avg}</div>
-                  <div style={{ color: '#ff9500', fontSize: 16, letterSpacing: 2, marginTop: 6 }}>{renderStars(avg)}</div>
-                  <div style={{ fontSize: 12, color: 'var(--light-gray)', marginTop: 6 }}>{rCount} reviews</div>
-                </div>
-                <div style={{ flex: 1 }}>
-                  {[5, 4, 3, 2, 1].map(s => { const c = reviews.filter(r => r.rating === s).length; const pct = rCount > 0 ? Math.round((c / rCount) * 100) : 0; return (
-                    <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                      <span style={{ fontSize: 12, color: 'var(--light-gray)', width: 24 }}>{s}★</span>
-                      <div style={{ flex: 1, height: 5, background: 'var(--border-light)', borderRadius: 3, overflow: 'hidden' }}><div style={{ height: '100%', background: '#ff9500', borderRadius: 3, width: `${pct}%`, transition: 'width .4s' }} /></div>
-                      <span style={{ fontSize: 11, color: 'var(--light-gray)', width: 24 }}>{c}</span>
+              {reviews.length > 0 && (
+                <div style={{ display: 'grid', gap: 16 }}>
+                  {reviews.map(r => (
+                    <div key={r._key} style={{ background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 16, padding: 16 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, var(--warm-200), var(--rose-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'var(--rose-dark)' }}>{(r.username || 'C').charAt(0).toUpperCase()}</div>
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-black)' }}>{r.username || 'Customer'}</div>
+                            <div style={{ fontSize: 11, color: 'var(--light-gray)' }}>{new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 2, color: '#ff9500', fontSize: 12 }}>{renderStars(r.rating)}</div>
+                      </div>
+                      {r.comment && <p style={{ fontSize: 13, color: 'var(--dark-gray)', lineHeight: 1.6, fontStyle: 'italic' }}>"{r.comment}"</p>}
                     </div>
-                  );})}
-                </div>
-              </div>
-            )}
-
-            {/* Write review */}
-            {user ? (
-              <div style={{ background: 'var(--white)', border: '1.5px solid var(--border-light)', borderRadius: 'var(--r-xl)', padding: 24, marginBottom: 24 }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, marginBottom: 16 }}>Write a Review</h3>
-                <div className="stars-input" style={{ marginBottom: 14 }}>
-                  {[1, 2, 3, 4, 5].map(s => (
-                    <span key={s} className={`star ${s <= (hover || rating) ? 'on' : ''}`} onMouseEnter={() => setHover(s)} onMouseLeave={() => setHover(0)} onClick={() => setRating(s)}>★</span>
                   ))}
                 </div>
-                <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Share your experience with this product…" className="form-input" style={{ marginBottom: 14 }} />
-                <button onClick={handleReview} disabled={submitting} className="btn btn-rose">{submitting ? 'Submitting…' : 'Submit Review'}</button>
-              </div>
-            ) : (
-              <div style={{ background: 'var(--warm-50)', padding: '14px 18px', borderRadius: 'var(--r-lg)', marginBottom: 20, fontSize: 13, color: 'var(--mid-gray)' }}>
-                <Link to="/login" style={{ color: 'var(--rose)', fontWeight: 600 }}>Sign in</Link> to write a review
-              </div>
-            )}
-
-            {reviews.length === 0 ? (
-              <div className="empty-state" style={{ padding: '32px 0' }}>
-                <div className="empty-icon">⭐</div>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--off-black)', marginBottom: 6 }}>No reviews yet</h3>
-                <p style={{ color: 'var(--light-gray)' }}>Be the first to share your experience!</p>
-              </div>
-            ) : reviews.map(r => (
-              <div key={r._key} style={{ background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 'var(--r-xl)', padding: '18px 20px', marginBottom: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--warm-200)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, color: 'var(--rose-dark)', flexShrink: 0 }}>{(r.username || 'C').charAt(0).toUpperCase()}</div>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--off-black)' }}>{r.username || 'Customer'}</div>
-                      <div style={{ fontSize: 11, color: 'var(--light-gray)' }}>{new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
-                    </div>
-                  </div>
-                  <div style={{ background: r.rating >= 4 ? '#22c55e' : r.rating >= 3 ? '#f59e0b' : '#ef4444', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 'var(--r-sm)' }}>★ {r.rating}</div>
-                </div>
-                {r.comment && <p style={{ fontSize: 13, color: 'var(--mid-gray)', lineHeight: 1.7 }}>{r.comment}</p>}
-              </div>
-            ))}
-          </div>
-        )}
+              )}
+            </motion.div>
+          )}
+        </div>
       </div>
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="section-sm" style={{ background: 'var(--white)' }}>
-          <div className="container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 500, color: 'var(--off-black)' }}>You may also like</h2>
-              <Link to={`/${isKasab ? 'kasab' : 'creative-canvas'}`} style={{ fontSize: 13, color: 'var(--rose)', fontWeight: 500 }}>View all →</Link>
+        <div style={{ background: 'var(--warm-50)', padding: '80px 0' }}>
+          <section className="section-sm container">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 600, color: 'var(--off-black)', letterSpacing: '-.02em' }}>You may also like</h2>
+              <Link to={`/${isKasab ? 'kasab' : 'creative-canvas'}`} style={{ fontSize: 14, color: 'var(--rose)', fontWeight: 600, borderBottom: '2px solid transparent', paddingBottom: 2, transition: 'border-color .2s' }} onMouseEnter={e => e.target.style.borderColor = 'var(--rose)'} onMouseLeave={e => e.target.style.borderColor = 'transparent'}>Explore Collection →</Link>
             </div>
             <div className="products-grid">{related.map((p, i) => <ProductCard key={p._key} product={p} index={i} />)}</div>
-          </div>
-        </section>
+          </section>
+        </div>
       )}
     </>
   );

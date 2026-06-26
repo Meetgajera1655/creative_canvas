@@ -14,11 +14,14 @@ export default function Footer() {
               Premium handcrafted resin art and Kasab embroidery — made with love in India.
             </p>
             <div style={{ display: 'flex', gap: 8, marginTop: 18, flexWrap: 'wrap' }}>
-              {['Instagram', 'Pinterest', 'WhatsApp'].map(s => (
-                <a key={s} href="#top" style={{ fontSize: 11, padding: '5px 11px', border: '1px solid rgba(255,255,255,.12)', borderRadius: 'var(--r-full)', color: 'rgba(255,255,255,.38)', transition: 'all .2s' }}
+              {[
+                { name: 'Instagram', url: 'https://www.instagram.com/creative_canvas26_/' },
+                { name: 'WhatsApp', url: 'https://wa.me/919327313381' }
+              ].map(s => (
+                <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, padding: '5px 11px', border: '1px solid rgba(255,255,255,.12)', borderRadius: 'var(--r-full)', color: 'rgba(255,255,255,.38)', transition: 'all .2s' }}
                   onMouseEnter={e => { e.target.style.borderColor = 'var(--rose)'; e.target.style.color = 'var(--rose)'; }}
                   onMouseLeave={e => { e.target.style.borderColor = 'rgba(255,255,255,.12)'; e.target.style.color = 'rgba(255,255,255,.38)'; }}>
-                  {s}
+                  {s.name}
                 </a>
               ))}
             </div>
