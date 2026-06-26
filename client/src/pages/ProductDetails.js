@@ -108,7 +108,7 @@ export default function ProductDetails() {
           <span className="breadcrumb-sep">›</span><span style={{ color: 'var(--dark-gray)' }}>{product.name}</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'start', marginBottom: 64 }}>
+        <div className="product-detail-layout" style={{ marginBottom: 64 }}>
           {/* LEFT — Image */}
           <div style={{ position: 'sticky', top: 'calc(var(--nav-h) + 20px)' }}>
             <motion.div initial={{ opacity: 0, scale: .97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .4 }}

@@ -72,7 +72,7 @@ export default function Navbar() {
         <div className="container" style={{ display: 'flex', alignItems: 'center', height: '100%', gap: 12 }}>
           {/* Logo */}
           <Link to="/" style={{ flexShrink: 0, marginRight: 32, textDecoration: 'none', display: 'flex', alignItems: 'center', height: '100%' }}>
-            <img src="/logo.png" alt="Creative Canvas" style={{ height: '75px', objectFit: 'contain' }} />
+            <img src="/logo.png" alt="Creative Canvas" style={{ height: 'calc(var(--nav-h) - 16px)', objectFit: 'contain' }} />
           </Link>
 
           {/* Center nav (Left aligned next to logo) */}

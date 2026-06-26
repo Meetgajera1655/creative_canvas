@@ -55,9 +55,9 @@ export default function Home() {
   return (
     <>
       {/* ══ HERO ══ */}
-      <section style={{ minHeight: '92vh', display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'var(--cream)', overflow: 'hidden' }}>
+      <section className="responsive-hero-grid" style={{ background: 'var(--cream)', overflow: 'hidden' }}>
         {/* LEFT */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 56px 80px 40px', background: 'var(--warm-50)', position: 'relative', overflow: 'hidden' }}>
+        <div className="hero-content-left" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--warm-50)', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', bottom: -100, left: -60, width: 360, height: 360, borderRadius: '50%', background: 'rgba(201,137,122,.07)', pointerEvents: 'none' }} />
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, ease: [.16,1,.3,1] }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: 'var(--r-full)', padding: '5px 14px', fontSize: 11, fontWeight: 700, color: 'var(--rose)', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 24, boxShadow: 'var(--shadow-xs)' }}>
@@ -87,7 +87,7 @@ export default function Home() {
           </motion.div>
         </div>
         {/* RIGHT — Editorial Collage */}
-        <div style={{ position: 'relative', width: '100%', height: '100%', background: 'var(--cream)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: 'clamp(400px, 50vw, 600px)', background: 'var(--cream)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
           
           {/* Main Arch Image */}
           {heroImg && (
@@ -130,7 +130,7 @@ export default function Home() {
       <section className="section" style={{ background: 'var(--white)' }}>
         <div className="container">
           <SectionHeader eyebrow="Collections" title="Shop by <em>Category</em>" />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div className="responsive-grid-2">
             {[
               { to: '/creative-canvas', label: 'Resin Art', title: 'Creative Canvas', sub: 'Luminous epoxy pieces — each one unique', staticImg: '/resin_category.png', dark: false },
               { to: '/kasab', label: 'Embroidery & Textile', title: 'Kasab', sub: 'Khatali embroidery rooted in heritage', staticImg: '/kasab_category.png', dark: true },
@@ -188,7 +188,7 @@ export default function Home() {
             <div className="eyebrow" style={{ color: 'var(--rose)', marginBottom: 10 }}>Why Creative Canvas</div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3vw,38px)', fontWeight: 600, color: 'var(--white)', letterSpacing: '-.02em', marginBottom: 48, fontStyle: 'italic' }}>Crafted with intention</h2>
           </FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20 }}>
+          <div className="responsive-grid-4">
             {[
               { icon: '🤲', title: '100% Handmade', desc: 'Every piece crafted by skilled artisans with no machines' },
               { icon: '✨', title: 'Premium Quality', desc: 'Only the finest resins and embroidery threads used' },
@@ -241,7 +241,7 @@ export default function Home() {
             <div className="eyebrow" style={{ marginBottom: 10 }}>Stay Connected</div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,3vw,34px)', fontWeight: 600, color: 'var(--off-black)', marginBottom: 10, letterSpacing: '-.02em' }}>New designs, in your inbox</h2>
             <p style={{ fontSize: 14, color: 'var(--mid-gray)', marginBottom: 28 }}>Exclusive offers and behind-the-scenes craft stories.</p>
-            <div style={{ display: 'flex', gap: 8, maxWidth: 420, margin: '0 auto' }}>
+            <div className="flex-wrap-mob" style={{ display: 'flex', gap: 8, maxWidth: 420, margin: '0 auto' }}>
               <input type="email" placeholder="your@email.com" className="form-input" style={{ flex: 1, borderRadius: 'var(--r-full)' }} />
               <button className="btn btn-primary" style={{ borderRadius: 'var(--r-full)', flexShrink: 0 }}>Subscribe</button>
             </div>

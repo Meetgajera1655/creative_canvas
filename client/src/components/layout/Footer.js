@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer style={{ background: 'var(--off-black)', color: 'rgba(255,255,255,.5)', paddingTop: 56, paddingBottom: 28 }}>
       <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
+        <div className="responsive-grid-footer" style={{ marginBottom: 40 }}>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, color: 'var(--white)', marginBottom: 4, letterSpacing: '-.01em' }}>
               Creative<em style={{ color: 'var(--rose)', fontStyle: 'italic', fontWeight: 400 }}> Canvas</em>
@@ -26,7 +26,7 @@ export default function Footer() {
           {[
             ['Shop', [['/', 'Home'], ['/shop', 'All Products'], ['/creative-canvas', 'Resin Art'], ['/kasab', 'Kasab']]],
             ['Account', [['/account', 'My Account'], ['/orders', 'Orders'], ['/cart', 'Cart'], ['/wishlist', 'Wishlist']]],
-            ['Help', [['#', 'Contact Us'], ['#', 'Shipping Policy'], ['#', 'Returns'], ['#', 'FAQ']]],
+            ['Help', [['/contact-us', 'Contact Us'], ['/shipping-policy', 'Shipping Policy'], ['/returns', 'Returns'], ['/faq', 'FAQ']]],
           ].map(([title, links]) => (
             <div key={title}>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 14 }}>{title}</div>

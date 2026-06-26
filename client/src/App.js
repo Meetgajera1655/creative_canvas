@@ -20,6 +20,10 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Account from './pages/Account';
 import Wishlist from './pages/Wishlist';
+import ContactUs from './pages/ContactUs';
+import ShippingPolicy from './pages/ShippingPolicy';
+import Returns from './pages/Returns';
+import FAQ from './pages/FAQ';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -63,6 +67,10 @@ function AppRoutes() {
           <Route path="/product/:id"     element={<ProductDetails />} />
           <Route path="/login"           element={<Login />} />
           <Route path="/signup"          element={<Signup />} />
+          <Route path="/contact-us"      element={<ContactUs />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/returns"         element={<Returns />} />
+          <Route path="/faq"             element={<FAQ />} />
 
           {/* Protected User */}
           <Route path="/cart"          element={<Protected><Cart /></Protected>} />
